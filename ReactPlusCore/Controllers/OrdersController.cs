@@ -105,7 +105,6 @@ namespace ReactPlusCore.Controllers
                                 reader.GetValue(7),
                                 reader.GetValue(8)
                                 );
-
                         }
                     }
                     reader.Close();
