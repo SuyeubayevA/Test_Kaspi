@@ -32,6 +32,3 @@ E:\SelfLearning\ReactJS_NetCORE_Shop\ReactPlusCore\bin\Debug\net5.0\runtimes\win
 E:\SelfLearning\ReactJS_NetCORE_Shop\ReactPlusCore\bin\Debug\net5.0\runtimes\win-x86\native\sni.dll
 E:\SelfLearning\ReactJS_NetCORE_Shop\ReactPlusCore\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 E:\SelfLearning\ReactJS_NetCORE_Shop\ReactPlusCore\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
-E:\SelfLearning\ReactJS_NetCORE_Shop\ReactPlusCore\bin\Debug\net5.0\Views\my-app\package-lock.json
-E:\SelfLearning\ReactJS_NetCORE_Shop\ReactPlusCore\bin\Debug\net5.0\Views\my-app\package.json
-E:\SelfLearning\ReactJS_NetCORE_Shop\ReactPlusCore\bin\Debug\net5.0\Views\my-app\public\manifest.json

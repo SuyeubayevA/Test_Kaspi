@@ -37,6 +37,7 @@ namespace ReactPlusCore.Controllers
                                 orderDate 
                             from Orders 
                             group by OrderId, status, address, CartNumber, orderDate
+                            order by orderDate
                             ";
 
 
@@ -62,7 +63,7 @@ namespace ReactPlusCore.Controllers
         [HttpPost]
         public JsonResult GetById([FromBody] OrderGetById Id)
         {
-            string query = @"p_getOrderInfo";
+            string query = @"p_getOrderInfo @Id";
 
 
             DataTable table = new DataTable("Order");
@@ -74,6 +75,7 @@ namespace ReactPlusCore.Controllers
             table.Columns.Add("Quantity", typeof(int));
             table.Columns.Add("commonPrice", typeof(int));
             table.Columns.Add("orderDate", typeof(string));
+            table.Columns.Add("logmessage", typeof(string));
 
             string sqlDataSource = _configuration.GetConnectionString("MainConnection");
             
@@ -82,7 +84,8 @@ namespace ReactPlusCore.Controllers
                 con.Open();
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Parameters.AddWithValue("@Id", Id.Id.ToString());
+                    string orderId = Id.Id.ToString();
+                    cmd.Parameters.AddWithValue("@Id", orderId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     if (reader.HasRows) // если есть данные
@@ -91,10 +94,17 @@ namespace ReactPlusCore.Controllers
 
                         while (reader.Read()) // построчно считываем данные
                         {
-                            object id = reader.GetValue(0);
-                            object name = reader.GetValue(1);
-                            object age = reader.GetValue(2);
-                            table.Rows.Add(reader.GetValue(0), reader.GetValue(1), reader.GetValue(2), reader.GetValue(3), reader.GetValue(4), reader.GetValue(5), reader.GetValue(6), reader.GetValue(7));
+                            table.Rows.Add(
+                                reader.GetValue(0), 
+                                reader.GetValue(1), 
+                                reader.GetValue(2), 
+                                reader.GetValue(3), 
+                                reader.GetValue(4), 
+                                reader.GetValue(5), 
+                                reader.GetValue(6), 
+                                reader.GetValue(7),
+                                reader.GetValue(8)
+                                );
 
                         }
                     }
@@ -107,7 +117,7 @@ namespace ReactPlusCore.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(List<Order> orders)
+        public JsonResult Post(SendingOrder orders)
         {
             string query = @"p_addOrders";
 
@@ -120,7 +130,7 @@ namespace ReactPlusCore.Controllers
             table.Columns.Add("Quantity", typeof(int));
             var orderGUID = Guid.NewGuid().ToString();
 
-            foreach (Order order in orders)
+            foreach (Order order in orders.orders)
             {
                 table.Rows.Add(orderGUID, order.goodId, order.status, order.address, order.CartNumber, order.Quantity);
             }
@@ -132,13 +142,14 @@ namespace ReactPlusCore.Controllers
                 using (SqlCommand cmd = new SqlCommand(query, con) { CommandType = CommandType.StoredProcedure })
                 {
                     cmd.Parameters.AddWithValue("@OrdersTempTable", table);
-
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     reader.Close();
                     con.Close();
                 }
             }
+
+            WriteLogRegisterMobileProtect(orderGUID, orders.message);
 
             return new JsonResult("Add Successfully");
         }
@@ -197,6 +208,37 @@ namespace ReactPlusCore.Controllers
             }
 
             return new JsonResult("Delete Successfully");
+        }
+
+        [Route("WriteLog")]
+        [HttpPost]
+        public int WriteLogRegisterMobileProtect(string orderId, string message)
+        {
+            int result = 0;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("MainConnection")))
+                {
+                    try
+                    {
+                        conn.Open();
+                        SqlCommand cmd = new SqlCommand("AddOrderLog", conn);
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@Message", message);
+                        cmd.Parameters.AddWithValue("@OrderId", orderId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return result;
         }
     }
 

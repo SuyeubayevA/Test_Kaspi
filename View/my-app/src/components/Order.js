@@ -1,28 +1,29 @@
-function Order(props){
+function Order(props){ console.log('HEREHREHRE', props)
     if(props.order.length !== 0){
         let sum=0;
         props.order.forEach(x=> sum+=x.commonPrice)
         return(
-            <div key={0} className="card mt-3" style={{width: '18rem'}}>
-                <img src="..." className="card-img-top" alt="basket" />
-                <div className="card-body">
+            <div className="card ml-3" style={{width: '18rem', borderRadius: '10px'}}>
+                <div className="card-body" style={{backgroundColor: '#cfccc4', borderTopRightRadius: '10px', borderTopLeftRadius: '10px'}}>
                     <h5 className="card-title">Заказ</h5>
                     <p className="card-text">{props.order[0].OrderId}</p>
                     <p className="card-text">Адрес: {props.order[0].address}</p>
                     <p className="card-text">Номер карты {props.order[0].CartNumber}</p>
                 </div>
-                <ul className="list-group list-group-flush">
+                <ul className="list-group list-group-flush" style={{height: '300px', overflow: 'auto'}}>
                     {props.order.map(good=>
-                        <li key = {good.Name} className="list-group-item">{good.Name}  - {good.Quantity}шт ({good.commonPrice})</li>
+                        <li key = {good.Name} className="list-group-item">{good.Name}  - {good.Quantity}шт ({good.commonPrice}тг за всё)</li>
                     )}
                 </ul>
                 
-                <div className="card-body">
+                <div style={{height: '150px', fontWeight: 'bold'}} >
                     Дата заказа {props.order[0].orderDate}
-                    <p className="card-text">Статус: {props.order[0].status}</p>
+                    <p >Статус: {props.order[0].status}</p><br/>
+                    <p >Сумма к оплате:  {sum} тг</p>
                 </div>
-                <div className="card-body">
-                    Сумма к оплате: {sum} тг
+
+                <div className="card-body" style={{backgroundColor: '#cfccc4', height: '300px', overflow:'auto'}}>
+                    Записи лога: {props.message}
                 </div>
             </div>
         )

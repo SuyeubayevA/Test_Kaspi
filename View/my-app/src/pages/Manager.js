@@ -10,7 +10,8 @@ export class Manager extends Component{
         this.state={
             orders:[],
             modalTitle:"",
-            oneOrder:[]
+            oneOrder:[],
+            logMessage:""
         }
     }
 
@@ -38,9 +39,11 @@ export class Manager extends Component{
             body:JSON.stringify({"Id": id})
         })
         .then(res=>res.json())
-        .then((result)=>{
+        .then((result)=>{console.log('result',result)
+            var message = result.find(good => good.logmessage !== '')
             this.setState({
-                oneOrder:result,
+                oneOrder:result.filter(good => good.logmessage === ''),
+                logMessage: message.logmessage
             });
         },(error)=>{
             alert('Failed');
@@ -93,7 +96,7 @@ export class Manager extends Component{
         return(
             <div className='wrapper d-flex justify-content-between m-3'>
                 
-                <table className="table table-striped  row eighty">
+                <table className="table table-striped  row eighty rounded" style={{borderTopRightRadius: '10px', borderTopLeftRadius: '10px'}}>
                     <tbody>
                         <tr>
                             <th>ID заказа</th>
@@ -145,8 +148,7 @@ export class Manager extends Component{
                     </tbody>
                 </table>
 
-                <Order order={this.state.oneOrder}/>
-
+                <Order order={this.state.oneOrder} message={this.state.logMessage} />
 
             </div>
         )

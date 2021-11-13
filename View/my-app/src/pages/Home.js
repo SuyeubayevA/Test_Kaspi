@@ -15,7 +15,8 @@ export class Home extends Component{
             totalSum: 0,
             show:false,
             ClientAddress:"",
-            CientCardNumber:""
+            CientCardNumber:"",
+            LogMessage:""
         }
     }
 
@@ -44,13 +45,15 @@ export class Home extends Component{
             
             this.setState({
                     addedGoods: addedGoodsNew,
-                    totalSum: totalSumNew
+                    totalSum: totalSumNew,
+                    LogMessage: this.state.LogMessage + "Добавил еще один " + value.Name + `стало (${item.qty}) общая сумма ${totalSumNew} \n <br>;`
                 });
         }else{
             let totalSumNew = this.state.totalSum;
             this.setState(prevState => ({
                 addedGoods: [...prevState.addedGoods, value],
-                totalSum: totalSumNew+value.Price
+                totalSum: totalSumNew+value.Price,
+                LogMessage: this.state.LogMessage + "Добавил первый " + value.Name + ` общая сумма ${totalSumNew+value.Price} \n <br>;`
               }))
         }
     }
@@ -67,27 +70,35 @@ export class Home extends Component{
                 });
                 this.setState({
                     addedGoods: addedGoods,
-                    totalSum: totalSumNew-value.Price
+                    totalSum: totalSumNew-value.Price,
+                    LogMessage: this.state.LogMessage + "Удалил единственный " + value.Name + ` общая сумма ${totalSumNew-value.Price} \n <br>;`
                 });
             }else{
                 item.qty = item.qty-1;
                 addedGoods[index] = item; 
                 this.setState({
                     addedGoods: addedGoods,
-                    totalSum: totalSumNew-value.Price
+                    totalSum: totalSumNew-value.Price,
+                    LogMessage: this.state.LogMessage + "Удалил " + value.Name + ` осталось(${item.qty}) общая сумма ${totalSumNew-value.Price} \n <br>;`
                 });
-            }  
+            }
         }
     }
 
     countSum = () => {
         let totalSum = 0;
         this.state.addedGoods.forEach(x => totalSum += x.qty*x.Price);
-        this.setState({totalSum});
+        this.setState({
+            totalSum,
+            LogMessage: this.state.LogMessage + " Заказ сформировали. Заполнение личных данных <br>;"
+        });
     }
 
     showModal = () => {
-        this.setState({ show: true });
+        this.setState({ 
+            show: true,
+            LogMessage: this.state.LogMessage + "Заполняет данные о клиенте <br>;"
+        });
       };
     
     hideModal = () => {
@@ -104,17 +115,22 @@ export class Home extends Component{
     }
 
     makeOrder=()=>{
-        var sendData = [];
+        var sendDataArray = [];
+        var sendData = {orders: [], message:""}
         this.state.addedGoods.forEach(good => 
-            sendData.push({
+            sendDataArray.push({
                 BusketId:0, 
                 goodId:good.Id, 
                 status: 'PROCEED', 
                 address: this.state.ClientAddress, 
                 CartNumber: this.state.CientCardNumber, 
                 Quantity: good.qty
-            })
+                })
             )
+        sendData = {
+            orders: sendDataArray,
+            message: this.state.LogMessage + "отправлен на обработку к менеджеру"
+        }
         fetch(variables.API_URL+'orders',{
             method:'POST',
             headers:{
@@ -125,7 +141,13 @@ export class Home extends Component{
         })
         .then(res=>res.json())
         .then(data=>{
-            this.setState({addedGoods:[]});
+            this.setState({
+                addedGoods:[],
+                totalSum: 0,
+                show:false,
+                LogMessage:""
+            });
+            alert('Заказ на обработке у менеджера')
         })
     }
     

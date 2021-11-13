@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,5 +16,11 @@ namespace ReactPlusCore.Model
         public string address { get; set; }
         public string CartNumber { get; set; }
         public int Quantity { get; set; }
+    }
+
+    public class SendingOrder
+    {
+        public List<Order> orders { get; set; }
+        public string message { get; set; }
     }
 }
