@@ -5,17 +5,6 @@ import {Orders, OneOrder} from '../interfaces/interfaces';
 
 export const Manager:React.FC=()=>{
 
-    // constructor(props){
-    //     super(props);
-
-    //     this.state={
-    //         orders:[],
-    //         modalTitle:"",
-    //         oneOrder:[],
-    //         logMessage:""
-    //     }
-    // }
-
     const [orders, setOrders] = useState<Orders[]>([])
     const [oneOrder, setOneOrder] = useState<OneOrder[]>([])
     const [logMessage, setLogMessage] = useState<string>("")

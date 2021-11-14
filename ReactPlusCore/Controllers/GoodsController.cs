@@ -56,6 +56,11 @@ namespace ReactPlusCore.Controllers
             return new JsonResult(table);
         }
 
+        /// <summary>
+        /// Хотел сделать страницу для создания новых товаров.
+        /// Но по времени не успевал и не стал дальше реализовывать
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult Post(Good good)
         {
@@ -148,6 +153,12 @@ namespace ReactPlusCore.Controllers
             return new JsonResult("Delete Successfully");
         }
 
+
+        /// <summary>
+        /// Метод для сохранения файлов изображения в папку. Должна была быть страница для создания новых товаров.
+        /// Но по времени не успевал и не стал дальше реализовывать
+        /// </summary>
+        /// <returns></returns>
         [Route("SaveFile")]
         [HttpPost]
         public JsonResult SaveFile()

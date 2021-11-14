@@ -7,18 +7,7 @@ import {Modal} from '../components/Modal';
 import {GoodItem, AddedGood, SendData} from '../interfaces/interfaces';
 
 export const Home:React.FC =()=>{
-    // constructor(props){
-    //     super(props);
-    //     this.state={
-    //         goods:[],
-    //         addedGoods:[],
-    //         totalSum: 0,
-    //         show:false,
-    //         ClientAddress:"",
-    //         CientCardNumber:"",
-    //         LogMessage:""
-    //     }
-    // }
+
     const [goods, setGoods] = useState<GoodItem[]>([])
     const [addedGoods, setAddedGoods] = useState<AddedGood[]>([])
     const [totalSum, setTotalSum] = useState<number>(0)
@@ -26,7 +15,6 @@ export const Home:React.FC =()=>{
     const [clientAddress, setClientAddress] = useState<string>("")
     const [clientCardNumber, setClientCardNumber] = useState<string>("")
     const [LogMessage, setLogMessage] = useState<string>("")
-
 
     const refreshList =()=>{
         fetch(variables.API_URL+'goods')
